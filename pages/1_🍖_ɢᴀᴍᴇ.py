@@ -29,8 +29,6 @@ st.set_page_config(
     layout="wide",
 )
 
-validator = passwordValidator()
-
 # Header
 st.markdown('<h1 style="font-family:\'Freckle Face\'; color:#ffbe45;">GAME</h1>', text_alignment="center", unsafe_allow_html=True)
 st.divider()
@@ -39,6 +37,8 @@ st.divider()
 st.sidebar.image("assets/logo1.png")
 
 #==================== Haggerty Code ====================#
+
+validator = passwordValidator()
 
 # Persistent variables (safe until referesh)
 if 'ruleSet' not in st.session_state:
