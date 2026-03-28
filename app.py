@@ -1,13 +1,7 @@
-from flask import Flask
-from zxcvbn import zxcvbn
+import streamlit as st
 
-app = Flask(__name__)
+# Streamlit stuff
+st.set_page_config(page_title="Hackathon 2026", layout="wide")
 
-@app.route("/")
-def home():
-    return "Hello, Flask is working!"
-
-if __name__ == "__main__":
-    app.run(debug=True)
-
-# This is a comment I added
+st.title("Welcome to Hackathon 2026")
+st.write("Use the sidebar to navigate between pages.")
