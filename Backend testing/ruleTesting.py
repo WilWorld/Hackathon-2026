@@ -20,44 +20,55 @@ class passwordValidator:
         self._rules.remove(rule)
         print("Removed rule")
     
+    # Validates all the rules built into the validator, will return arrays of descriptions and booleans
     def validate(self, password: str) -> dict:
         """Notify all rules and collect results"""
         results = {}
+        descriptions = []
+        flags = []
         all_valid = True
         
         for rule in self._rules:
             is_valid = rule.check(password)
             rule_name = rule.__class__.__name__
             results[rule_name] = is_valid
+            flags.append(is_valid)
+
+            desc = getattr(rule, 'description', rule_name)
+            descriptions.append(f"{desc} - {'met' if is_valid else 'not met'}")
+
             if not is_valid:
                 all_valid = False
         
         return {
             'all_valid': all_valid,
             'results': results,
+            'descriptions': descriptions,
+            'flags': flags,
         }
-    
-    def checkRule(self, rule: passwordRule, password: str) -> bool:
-        return rule.check(password)
               
 # Concrete Observers
 # Rule 1 - at Least 12 characters
 class ruleOne(passwordRule):
+        description = "At least 12 characters"
         def check(self, password: str) -> bool:
             return len(password) >= 12
         
 # Rule 2 - Must have a big letter
 class ruleTwo(passwordRule):
+        description = "At least one uppercase letter"
         def check(self, password: str) -> bool:
             return any(c.isupper() for c in password)
              
 # Rule 3 - Must have an emoji
 class ruleThree(passwordRule):
+        description = "At least one non-ASCII character (emoji or symbol)"
         def check(self, password: str) -> bool:
             return any(ord(c) > 127 for c in password)
              
 # Rule 4 - no repeating characters
 class ruleFour(passwordRule):
+        description = "No consecutive repeating characters"
         def check(self, password: str) -> bool:
             for i in range(len(password) - 1):
                 if password[i] == password[i+1]:
@@ -66,6 +77,7 @@ class ruleFour(passwordRule):
              
 # Rule 5 - special characters
 class ruleFive(passwordRule):
+        description = "Contains at least one special character"
         def __init__(self, specialChar: str = "!@#$%^&*-_=+"):
              self.specialChar = specialChar
         def check(self, password: str) -> bool:
@@ -73,6 +85,7 @@ class ruleFive(passwordRule):
               
 # Rule 6 - Must include one of the following caveman noises (ug, gr, oga)
 class ruleSix(passwordRule):
+        description = "Includes caveman noise (ug, gr, or oga)"
         def check(self, password: str) -> bool:
             cavemanNoise = ["ug", "gr", "oga"]
             originalPas = password.lower()
@@ -80,12 +93,14 @@ class ruleSix(passwordRule):
               
 # Rule 7 - Tallies must equal 7
 class ruleSeven(passwordRule):
+        description = "Contains exactly 7 tally marks '|'"
         def check(self, password: str) -> bool:
             tallyCount = password.count('|')
             return tallyCount == 7
 
 # Rule 8 - what killed the dinosaurs?
 class ruleEight(passwordRule):
+        description = "Contains dinosaur killer keyword (astroid or bigrock)"
         def check(self, password: str) -> bool:
             answer = ["astroid", "bigrock"]
             originalPas = password.lower()
@@ -93,6 +108,7 @@ class ruleEight(passwordRule):
 
 # Rule 9 - Password must be LESS than 25 characters
 class ruleNine(passwordRule):
+        description = "Less than 25 characters"
         def check(self, password: str) -> bool:
             return len(password) < 25
 
@@ -110,8 +126,9 @@ validator.subscribe(ruleSeven())
 validator.subscribe(ruleEight())
 validator.subscribe(ruleNine())
 
+pas = validator.validate("oga|ogaUG!astroid")
+print(pas["descriptions"])
+print(pas["descriptions"][0])
 
-password = "oga"
-print(validator.validate(password))
-
-print(validator.checkRule(ruleOne(), password))
+print(pas["results"])  
+print(pas["results"]["ruleOne"])  
