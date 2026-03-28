@@ -1,4 +1,5 @@
 from flask import Flask
+from zxcvbn import zxcvbn
 
 app = Flask(__name__)
 
