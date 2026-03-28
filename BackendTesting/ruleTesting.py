@@ -144,7 +144,7 @@ class ruleWordLength:
         def check(self, password: str) -> bool:
              word = password.split()
              for words in word:
-                return len(w) > 5
+                return len(word) > 5
 
 # All neighbor charcters must form word
 class ruleNeighborWords:
