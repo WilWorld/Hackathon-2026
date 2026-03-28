@@ -1,15 +1,44 @@
 import streamlit as st
 from BackendTesting.ruleTesting import passwordValidator, ruleOne, ruleTwo, ruleThree, ruleFour, ruleFive, ruleSix, ruleSeven, ruleEight, ruleNine
 
+# Page styling
+st.markdown(
+    """
+    <style>
+    [data-testid="stSidebar"] {
+        background-color: #8C5F1E;  
+    }
+    [data-testid="stSidebar"] span,
+    [data-testid="stSidebar"] .stText {
+        font-size: 110%;
+        font-weight: bold;
+    }
+    [data-testid="stSidebar"] * {
+        color: #fff;  
+    }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Freckle+Face" rel="stylesheet">
+    """,
+    unsafe_allow_html=True
+)
+
+# Page setup
 st.set_page_config(
     page_title="GRUG", 
     page_icon="🗿", 
     layout="wide",
 )
-st.title("This is the game page")
-st.sidebar.image("assets/logo1.png")
 
 validator = passwordValidator()
+
+# Header
+st.markdown('<h1 style="font-family:\'Freckle Face\'; color:#ffbe45;">GAME</h1>', text_alignment="center", unsafe_allow_html=True)
+st.divider()
+
+# Sidebar Logo
+st.sidebar.image("assets/logo1.png")
+
+#==================== Haggerty Code ====================#
 
 # Persistent variables (safe until referesh)
 if 'ruleSet' not in st.session_state:
