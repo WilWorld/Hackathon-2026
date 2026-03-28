@@ -1,14 +1,19 @@
 import streamlit as st
 
-st.title("Game Page")
-st.header("Booga Ooga MF")
+st.set_page_config(
+    page_title="GRUG", 
+    page_icon="🗿", 
+    layout="wide",
+)
+st.title("This is the game page")
+st.sidebar.image("assets/logo1.png")
 
 # Persistent variables (safe until referesh)
 if 'ruleSet' not in st.session_state:
     st.session_state['ruleSet'] = ["rule1", "rule2", "rule3"] ## Call function to get rules
 if 'uncoveredRules' not in st.session_state:
     st.session_state['uncoveredRules'] = []
-if 'lastRule' not in st.session_state:
+if 'lastRule' not in st.session_state:  
     st.session_state['lastRule'] = 'null'
 if 'numberOfAttempts' not in st.session_state:
     st.session_state['numberOfAttempts'] = 0
