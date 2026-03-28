@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
+import random
 
 # observer abstract
 class passwordRule:
@@ -127,6 +128,61 @@ class ruleNine(passwordRule):
         def check(self, password: str) -> bool:
             return len(password) < 25
 
+#Throwback rules
+# Tenth character must be Z
+class ruleOneCharZ(passwordRule):
+        def check(self, password: str) -> bool:    
+            return password[9] == "z"
+
+# Must include one non Latin character  
+class ruleLatinChar(passwordRule):
+        def check(self, password: str) -> bool:
+             return any(ord(c) > 127 for c in password)
+
+# No words are longer than 4      
+class ruleWordLength:
+        def check(self, password: str) -> bool:
+             word = password.split()
+             for words in word:
+                return len(w) > 5
+
+# All neighbor charcters must form word
+class ruleNeighborWords:
+        def check(self, password: str) -> bool:
+             word = password.split()
+             for words in word:
+                  return words.alpha()
+                
+# All symbols must neighbor the letter 'b'
+class ruleNeighborB:
+        def check(self, password: str) -> bool:
+             word = password.split()
+             for words in word:
+                  return words == 'c'
+             
+#Must include the word "stick"
+class ruleNeighborStick:
+        def check(self, password: str) -> bool:
+             word = password.split()
+             for words in word:
+                  return words == "stick"   
+
+RANDOM_THROWBACKS_Rules =[
+     ruleOneCharZ,
+     ruleLatinChar,
+     ruleWordLength,
+     ruleNeighborWords,
+     ruleNeighborB,
+     ruleNeighborStick
+]
+# Randomize the throwbacks 
+class RandomThrowbacks:
+     def __init__(self):
+          self.rule = random.choice(RANDOM_THROWBACKS_Rules)
+     
+     def check(self, password):
+          return self.rule.check(password)
+     
 
 # TESTING STUFF FOR RULES
 validator = passwordValidator()
