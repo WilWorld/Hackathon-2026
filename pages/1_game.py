@@ -5,16 +5,18 @@ st.set_page_config(
     page_icon="🗿", 
     layout="wide",
 )
-
 st.title("This is the game page")
-
 st.sidebar.image("assets/logo1.png")
 
 # Persistent variables (safe until referesh)
-if 'uncoveredRules' not in st.session_state:
-    st.session_state['uncoveredRules'] = []
 if 'ruleSet' not in st.session_state:
     st.session_state['ruleSet'] = ["rule1", "rule2", "rule3"] ## Call function to get rules
+if 'uncoveredRules' not in st.session_state:
+    st.session_state['uncoveredRules'] = []
+if 'lastRule' not in st.session_state:  
+    st.session_state['lastRule'] = 'null'
+if 'numberOfAttempts' not in st.session_state:
+    st.session_state['numberOfAttempts'] = 0
 
 # Check if a new rule is correct
 def find_uncovered(ruleResults):
@@ -24,12 +26,13 @@ def find_uncovered(ruleResults):
             st.session_state['uncoveredRules'].append(st.session_state['ruleSet'][start])
             start += 1
         else:
+            st.session_state['lastRule'] = st.session_state['ruleSet'][len(st.session_state['uncoveredRules'])]
             break
 
 # Referesh every password attempt
 passwordAttempt = st.text_input("Put in that p-ass (word)")
 if passwordAttempt != "":
-    ruleResults = [True, False, False] ## Call function to recieve results
+    ruleResults = [False, False, False] ## Call function to recieve results
     find_uncovered(ruleResults)
 
     # Win/fail message
@@ -47,9 +50,10 @@ if passwordAttempt != "":
             st.badge(rule, color="red")
         index += 1
     if len(st.session_state['uncoveredRules']) < len(st.session_state['ruleSet']):
-        st.badge(st.session_state['ruleSet'][index], color="red")
+        st.badge(st.session_state['lastRule'], color="red")
 else:
     for rule in st.session_state['uncoveredRules']:
         st.badge(rule, color="red")
-    if len(st.session_state['uncoveredRules']) < len(st.session_state['ruleSet']):
-        st.badge(st.session_state['ruleSet'][len(st.session_state['uncoveredRules'])], color="red")
+    if len(st.session_state['uncoveredRules']) < len(st.session_state['ruleSet']) and st.session_state['lastRule'] != 'null':
+        st.badge(st.session_state['lastRule'], color="red")
+
