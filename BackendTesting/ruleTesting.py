@@ -11,6 +11,15 @@ class passwordRule:
 class passwordValidator:
     def __init__(self):
         self._rules: List[passwordRule] = []
+        self.subscribe(ruleOne())
+        self.subscribe(ruleTwo())
+        self.subscribe(ruleThree())
+        self.subscribe(ruleFour())
+        self.subscribe(ruleFive())
+        self.subscribe(ruleSix())
+        self.subscribe(ruleSeven())
+        self.subscribe(ruleEight())
+        self.subscribe(ruleNine())
 
     def subscribe(self, rule: passwordRule) -> None:
         self._rules.append(rule)
@@ -24,15 +33,19 @@ class passwordValidator:
     def validate(self, password: str) -> dict:
         """Notify all rules and collect results"""
         results = {}
+        rule_name = []
         descriptions = []
         flags = []
         all_valid = True
         
+        index = 0
         for rule in self._rules:
             is_valid = rule.check(password)
             rule_name = rule.__class__.__name__
-            results[rule_name] = is_valid
+            results[index] = is_valid
             flags.append(is_valid)
+
+            index += 1
 
             desc = getattr(rule, 'description', rule_name)
             descriptions.append(f"{desc} - {'met' if is_valid else 'not met'}")
@@ -40,6 +53,8 @@ class passwordValidator:
             if not is_valid:
                 all_valid = False
         
+        print("/// DESCTIPTION ///", descriptions)
+
         return {
             'all_valid': all_valid,
             'results': results,
@@ -116,20 +131,20 @@ class ruleNine(passwordRule):
 # TESTING STUFF FOR RULES
 validator = passwordValidator()
 
-validator.subscribe(ruleOne())
-validator.subscribe(ruleTwo())
-validator.subscribe(ruleThree())
-validator.subscribe(ruleFour())
-validator.subscribe(ruleFive())
-validator.subscribe(ruleSix())
-validator.subscribe(ruleSeven())
-validator.subscribe(ruleEight())
-validator.subscribe(ruleNine())
+#validator.subscribe(ruleOne())
+#validator.subscribe(ruleTwo())
+#validator.subscribe(ruleThree())
+#validator.subscribe(ruleFour())
+#validator.subscribe(ruleFive())
+#validator.subscribe(ruleSix())
+#validator.subscribe(ruleSeven())
+#validator.subscribe(ruleEight())
+#validator.subscribe(ruleNine())
 
 pas = validator.validate("oga|ogaUG!astroid")
 # Get rules
-print(pas["descriptions"])
+print("///pas - descriptions///", pas["descriptions"])
 print(pas["descriptions"][0])
 # Get results
-print(pas["results"])  
-print(pas["results"]["ruleOne"])  
+print("///pas = results", pas["results"])  
+print(pas["results"][0])  

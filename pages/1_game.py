@@ -1,5 +1,5 @@
 import streamlit as st
-from BackendTesting.ruleTesting import passwordValidator
+from BackendTesting.ruleTesting import passwordValidator, ruleOne, ruleTwo, ruleThree, ruleFour, ruleFive, ruleSix, ruleSeven, ruleEight, ruleNine
 
 st.set_page_config(
     page_title="GRUG", 
@@ -23,20 +23,23 @@ if 'numberOfAttempts' not in st.session_state:
 
 # Check if a new rule is correct
 def find_uncovered(ruleResults):
+    print("/// LENGTH ///", len(st.session_state['uncoveredRules']), "/// RULE 0 ///", ruleResults[0])
     start = len(st.session_state['uncoveredRules'])
-    for rule in ruleResults[len(st.session_state['uncoveredRules']):]:
-        if rule:
-            st.session_state['uncoveredRules'].append(st.session_state['ruleSet'][start])
-            start += 1
+    indexRange = len(ruleResults)
+    for index in range(start, indexRange): #len(st.session_state['uncoveredRules'])
+        print("---THIS IS THE RULE---")
+        if ruleResults[index]:
+            st.session_state['uncoveredRules'].append(st.session_state['ruleSet'][index])
         else:
-            st.session_state['lastRule'] = st.session_state['ruleSet'][len(st.session_state['uncoveredRules'])]
+            st.session_state['lastRule'] = st.session_state['ruleSet'][index]
             break
 
 # Referesh every password attempt
 passwordAttempt = st.text_input("Put in that p-ass (word)")
 if passwordAttempt != "":
     ruleResults = validator.validate(passwordAttempt)["results"]
-    print("THESE SARE THE ONESSSSS",ruleResults)
+    print("------THESE SARE THE ONESSSSS------", ruleResults)
+    print("/// RESULT - ///", ruleResults[0])
     find_uncovered(ruleResults)
 
     # Win/fail message
