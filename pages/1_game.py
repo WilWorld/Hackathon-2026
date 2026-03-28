@@ -1,4 +1,5 @@
 import streamlit as st
+from ruleTesting import passwordValidator
 
 st.set_page_config(
     page_title="GRUG", 
@@ -40,6 +41,8 @@ if passwordAttempt != "":
         st.write("WOW! You did it! Now your rocks and stone are secure :L)")
     else:
         st.write("INCREDIBLE! I've never seen a passoword so horrid and insecure!")
+
+    st.write("test is: ", testfunction())
 
     # Display
     index = 0
