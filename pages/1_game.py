@@ -1,5 +1,5 @@
 import streamlit as st
-from ruleTesting import passwordValidator
+from BackendTesting.ruleTesting import passwordValidator
 
 st.set_page_config(
     page_title="GRUG", 
@@ -9,9 +9,11 @@ st.set_page_config(
 st.title("This is the game page")
 st.sidebar.image("assets/logo1.png")
 
+validator = passwordValidator()
+
 # Persistent variables (safe until referesh)
 if 'ruleSet' not in st.session_state:
-    st.session_state['ruleSet'] = ["rule1", "rule2", "rule3"] ## Call function to get rules
+    st.session_state['ruleSet'] = validator.validate("initial")["descriptions"]
 if 'uncoveredRules' not in st.session_state:
     st.session_state['uncoveredRules'] = []
 if 'lastRule' not in st.session_state:  
@@ -33,7 +35,8 @@ def find_uncovered(ruleResults):
 # Referesh every password attempt
 passwordAttempt = st.text_input("Put in that p-ass (word)")
 if passwordAttempt != "":
-    ruleResults = [False, False, False] ## Call function to recieve results
+    ruleResults = validator.validate(passwordAttempt)["results"]
+    print("THESE SARE THE ONESSSSS",ruleResults)
     find_uncovered(ruleResults)
 
     # Win/fail message
@@ -41,8 +44,6 @@ if passwordAttempt != "":
         st.write("WOW! You did it! Now your rocks and stone are secure :L)")
     else:
         st.write("INCREDIBLE! I've never seen a passoword so horrid and insecure!")
-
-    st.write("test is: ", testfunction())
 
     # Display
     index = 0

@@ -127,8 +127,9 @@ validator.subscribe(ruleEight())
 validator.subscribe(ruleNine())
 
 pas = validator.validate("oga|ogaUG!astroid")
+# Get rules
 print(pas["descriptions"])
 print(pas["descriptions"][0])
-
+# Get results
 print(pas["results"])  
 print(pas["results"]["ruleOne"])  
