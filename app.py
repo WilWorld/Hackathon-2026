@@ -1,5 +1,8 @@
 import streamlit as st
 
+# Type this in to run the file
+# streamlit run app.py
+
 # Streamlit stuff
 st.set_page_config(page_title="Hackathon 2026", layout="wide")
 
