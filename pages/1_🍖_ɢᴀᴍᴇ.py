@@ -82,6 +82,9 @@ def get_ruleResults_sum(ruleResults, ruleRange):
     print("rrsum: ", rrsum)
     return rrsum
 
+# Stats container positioning
+statsContainer = st.container(border=True, gap="small")
+
 # Refreshes every password attempt
 passwordAttempt = st.text_input(label="", placeholder="Type password here")
 if passwordAttempt != "":
@@ -138,7 +141,7 @@ if passwordAttempt != "":
             # -ME
     passwordStatistics = password_test(passwordAttempt)
     if len(passwordStatistics) > 2:
-        with st.container(border=True, gap="small"):
+        with statsContainer:
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.caption(passwordStatistics[0])
