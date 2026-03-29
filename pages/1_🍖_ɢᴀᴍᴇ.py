@@ -30,12 +30,12 @@ st.set_page_config(
     layout="wide",
 )
 
+# Sidebar Logo
+st.sidebar.image("assets/logo1.png")
+
 # Header
 st.markdown('<h1 style="font-family:\'Freckle Face\'; color:#ffbe45;">GAME</h1>', text_alignment="center", unsafe_allow_html=True)
 st.divider()
-
-# Sidebar Logo
-st.sidebar.image("assets/logo1.png")
 
 #==================== Haggerty Code ====================#
 # Win: o|m|l|s|h|E|!|😀ugbigrock
@@ -77,7 +77,7 @@ def get_ruleResults_sum(ruleResults, ruleRange):
     print("rrsum: ", rrsum)
     return rrsum
 
-# Referesh every password attempt
+# Refereshes every password attempt
 passwordAttempt = st.text_input("Put in that p-ass (word)")
 if passwordAttempt != "":
     ruleResults = validator.validate(passwordAttempt)["results"]
@@ -102,7 +102,16 @@ if passwordAttempt != "":
             st.badge(rule, color="red")
         index -= 1
 
-    st.write(password_test(passwordAttempt))
+    ### CHARLIE MAKE THE SPACE BETWEEN THE LINES SMALLER!!!!!!
+            # -ME
+    passwordStatistics = password_test(passwordAttempt)
+    if len(passwordStatistics) > 2:
+        st.caption(passwordStatistics[0])
+        st.caption(passwordStatistics[1])
+        st.caption(passwordStatistics[2])
+    else:
+        st.caption(passwordStatistics[0])
+        st.caption(passwordStatistics[1])
 else:
     if len(st.session_state['uncoveredRules']) < len(st.session_state['ruleSet']) and st.session_state['lastRule'] != 'null':
         st.badge(st.session_state['lastRule'], color="red")
