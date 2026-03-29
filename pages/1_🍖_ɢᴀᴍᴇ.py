@@ -2,6 +2,7 @@ import streamlit as st
 from BackendTesting.ruleTesting import passwordValidator
 from BackendTesting.zxcvbnTesting import password_test
 import re
+import random
 
 # Page styling
 st.markdown(
@@ -81,19 +82,49 @@ def get_ruleResults_sum(ruleResults, ruleRange):
     print("rrsum: ", rrsum)
     return rrsum
 
-# Refereshes every password attempt
-passwordAttempt = st.text_input("Put in that p-ass (word)")
+# Stats container positioning
+statsContainer = st.container(border=True, gap="small")
+
+# Refreshes every password attempt
+passwordAttempt = st.text_input(label="", placeholder="Type password here")
 if passwordAttempt != "":
     ruleResults = validator.validate(passwordAttempt)["results"]
     find_uncovered(ruleResults)
 
     print("LENGTH OF RULERESULTS", len(ruleResults))
 
+    Failmessages = [
+        "INCREDIBLE! I never see a password so horrid!",
+        "Weak password bring shame to tribe",
+        "Password so bad meal escape cage",
+        "Mammoth child make better password than this",
+        "Password weak. Even sleepy mammoth guess this.",
+        "Bad password. Cave baby break in.",
+        "You make soft password. No keep tribe safe.",
+        "Tiny brain password. Enemy laugh.",
+        "Password weak like wet stick.",
+        "This password weak. One bonk and enemy inside cave.",
+        "You choose bad password. Even slow turtle guess.",
+        "Tribe not safe. Password crumble like old bone.",
+        "Hunter spot this password from far away.",
+        "No good. Password softer than mud.",
+        "Enemy guess this fast. You must think harder.",
+        "Too easy. Even rock know this password.",
+        "Password small. Danger come.",
+        "Weak password bring shame to tribe.",
+        "No. Try again. Use bigger brain.",
+        "Password weak. Tribe in danger.",
+        "Bad password. Mammoth walk right in.",
+        "Too easy. Cave door wide open.",
+        "Enemy guess this before fire start.",
+        "Weak. Try again with big brain."
+    ]
+
     # Win/fail message
     if get_ruleResults_sum(ruleResults, len(ruleResults)) == len(ruleResults):
-        st.write("WOW! You did it! Now your rocks and stone are secure :L)")
+        st.write("WOW! You did it! Now your rocks and stone are secure")
     else:
-        st.write("INCREDIBLE! I've never seen a passoword so horrid and insecure!")
+        st.caption(random.choice(Failmessages))
 
     # Display
     index = len(st.session_state['uncoveredRules'])-1
@@ -110,7 +141,7 @@ if passwordAttempt != "":
             # -ME
     passwordStatistics = password_test(passwordAttempt)
     if len(passwordStatistics) > 2:
-        with st.container(border=True, gap="small"):
+        with statsContainer:
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.caption(passwordStatistics[0])
