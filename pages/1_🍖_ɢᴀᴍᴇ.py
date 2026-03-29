@@ -22,6 +22,11 @@ st.markdown(
     [data-testid="stSidebar"] * {
         color: #fff;  
     }
+    [class="stMarkdownBadge"] {
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow-wrap: anywhere !important;
+    }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Freckle+Face" rel="stylesheet">
     """,
