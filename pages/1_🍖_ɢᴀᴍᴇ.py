@@ -48,7 +48,7 @@ st.markdown('<h1 style="font-family:\'Freckle Face\'; color:#ffbe45;">GAME</h1>'
 st.divider()
 
 #==================== Haggerty Code ====================#
-# Win: o|m|l|s|h|E|!|😀ugbigrock
+# Win: ug|h|a|H|c😛|@|u|gL/I+Iasteroidtrexmeatcavetaemclub
 
 #Smart rock, play evanescence
 #Smart rock, play cranberries
@@ -161,7 +161,7 @@ if passwordAttempt != "":
 
     # Win/fail message
     if get_ruleResults_sum(ruleResults, len(ruleResults)) == len(ruleResults):
-        st.caption("WOW! You did it! Now your rocks and stone are secure")
+        st.info("WOW! You did it! Now your rocks and stone are secure")
     else:
         st.caption(random.choice(Failmessages))
 
@@ -177,7 +177,7 @@ if passwordAttempt != "":
     #        st.badge(st.session_state['lastRule'], color="red",  icon="❌")
     
     # Incorrect answers first
-    if not ruleResults[len(st.session_state['uncoveredRules'])]:
+    if len(st.session_state['uncoveredRules']) < len(ruleResults) and not ruleResults[len(st.session_state['uncoveredRules'])]:
         with column1:
             st.badge(st.session_state['lastRule'], color="red", icon="❌")
         bool = False
@@ -195,7 +195,7 @@ if passwordAttempt != "":
         index -= 1
 
     # Correct anwsers after
-    if ruleResults[len(st.session_state['uncoveredRules'])]:
+    if len(st.session_state['uncoveredRules']) < len(ruleResults) and ruleResults[len(st.session_state['uncoveredRules'])]:
         if bool:
             with column1:
                 st.badge(st.session_state['lastRule'], color="green", icon="✅")
