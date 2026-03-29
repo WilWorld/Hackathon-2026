@@ -56,6 +56,10 @@ if 'lastRule' not in st.session_state:
     st.session_state['lastRule'] = 'null'
 if 'numberOfAttempts' not in st.session_state:
     st.session_state['numberOfAttempts'] = 0
+if "password_saved" not in st.session_state:
+    st.session_state["password_saved"] = ""
+if 'passwordAttempt' not in st.session_state:
+    st.session_state['passwordAttempt'] = st.session_state["password_saved"]
 
 # Check if a new rule is correct
 def find_uncovered(ruleResults):
@@ -84,9 +88,25 @@ def get_ruleResults_sum(ruleResults, ruleRange):
 
 # Stats container positioning
 statsContainer = st.container(border=True, gap="small")
+with statsContainer:
+    col1, col2, col3 = st.columns(3)
+    
+    col1_placeholder = col1.empty()
+    col2_placeholder = col2.empty()
+    col3_placeholder = col3.empty()
 
-# Refreshes every password attempt
-passwordAttempt = st.text_input(label="", placeholder="Type password here")
+    col1_placeholder.caption("Time: --")
+    col2_placeholder.caption("Guesses: --")
+    col3_placeholder.caption("Score: --")
+
+# Saves password state across the session
+passwordAttempt = st.text_input(
+    label="",
+    placeholder="Type password here",
+    key="passwordAttempt"
+)
+st.session_state["password_saved"] = passwordAttempt
+
 if passwordAttempt != "":
     ruleResults = validator.validate(passwordAttempt)["results"]
     find_uncovered(ruleResults)
@@ -154,33 +174,25 @@ if passwordAttempt != "":
 
     # Displays meaninful data on password attempts
     passwordStatistics = password_test(passwordAttempt)
+
     if len(passwordStatistics) > 2:
-        with statsContainer:
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.caption(passwordStatistics[0])
-            with col2:
-                st.caption(passwordStatistics[1])
-            with col3:
-                match = re.search(r"\[(.*?)\]", passwordStatistics[2])
-                
-                if match:
-                    if match.group(1) == "very weak":
-                        st.caption("Score: :violet[very weak]")
-                    elif match.group(1) == "weak":
-                        st.caption("Score: :red[weak]")
-                    elif match.group(1) == "fair":
-                        st.caption("Score: :orange[fair]")
-                    elif match.group(1) == "strong":
-                        st.caption("Score: :yellow[strong]")
-                    elif match.group(1) == "very strong":
-                        st.caption("Score: :green[very strong]")
-                    else:
-                        st.caption("error!")
-                        print(match.group(1))
+        col1_placeholder.caption(passwordStatistics[0])
+        col2_placeholder.caption(passwordStatistics[1])
+        match = re.search(r"\[(.*?)\]", passwordStatistics[2])
+        if match:
+            score_text = match.group(1)
+            color_map = {
+                "very weak": "violet",
+                "weak": "red",
+                "fair": "orange",
+                "strong": "yellow",
+                "very strong": "green"
+            }
+            col3_placeholder.caption(f"Score: :{color_map.get(score_text, 'white')}[{score_text}]")
     else:
-        st.caption(passwordStatistics[0])
-        st.caption(passwordStatistics[1])
+        col1_placeholder.caption(passwordStatistics[0])
+        col2_placeholder.caption(passwordStatistics[1])
+        col3_placeholder.caption("Score: --")
 else:
     if len(st.session_state['uncoveredRules']) < len(st.session_state['ruleSet']) and st.session_state['lastRule'] != 'null':
         st.badge(st.session_state['lastRule'], color="red", icon="❌")
