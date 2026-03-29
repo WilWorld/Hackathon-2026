@@ -29,28 +29,6 @@ class passwordValidator:
         self.subscribe(ruleWeaponType())
         self.subscribe(ruleReplaceTenthChar())
         self.subscribe(romanNumTest())
-
-    def init_random_select(self):
-        # Add rule to be randomly selected
-        ruleLister = [ruleOne(),
-                    ruleTwo(),
-                    ruleThree(),
-                    ruleFour(),
-                    ruleFive(),
-                    ruleSix(),
-                    ruleSeven(),
-                    ruleEight(),
-                    ruleNine(),
-                    ruleNeighborStick(),
-                    ruleWeaponType()]
-        
-        for need in range(9): # 9 Random Rules are chosen
-            left = len(ruleLister)-1
-            print(left)
-            randnum = random.randrange(0, left)
-            self.subscribe(ruleLister[randnum])
-            ruleLister.remove(ruleLister[randnum])
-        return True
             
     def subscribe(self, rule: passwordRule) -> None:
         self._rules.append(rule)
