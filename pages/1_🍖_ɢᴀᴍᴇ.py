@@ -93,6 +93,7 @@ if passwordAttempt != "":
 
     print("LENGTH OF RULERESULTS", len(ruleResults))
 
+    # Options for fail messages
     Failmessages = [
         "INCREDIBLE! I never see a password so horrid!",
         "Weak password bring shame to tribe",
@@ -126,19 +127,32 @@ if passwordAttempt != "":
     else:
         st.caption(random.choice(Failmessages))
 
+    # Columns for splitting rules
+    column1, column2 = st.columns(2)
+
     # Display
     index = len(st.session_state['uncoveredRules'])-1
     if len(st.session_state['uncoveredRules']) < len(st.session_state['ruleSet']):
-        st.badge(st.session_state['lastRule'], color="red",  icon="❌")
+        with column1:
+            st.badge(st.session_state['lastRule'], color="red",  icon="❌")
+    
+    # Split items here
+    bool = False
     for rule in reversed(st.session_state['uncoveredRules']):
         if ruleResults[index]:
-            st.badge(rule, color="green", icon="✅")
+            if bool == True:
+                with column1:
+                    st.badge(rule, color="green", icon="✅")
+                bool = False
+            else:
+                with column2:
+                    st.badge(rule, color="green", icon="✅")
+                bool = True
         else:
             st.badge(rule, color="red", icon="❌")
         index -= 1
 
-    ### CHARLIE MAKE THE SPACE BETWEEN THE LINES SMALLER!!!!!!
-            # -ME
+    # Displays meaninful data on password attempts
     passwordStatistics = password_test(passwordAttempt)
     if len(passwordStatistics) > 2:
         with statsContainer:
@@ -169,7 +183,7 @@ if passwordAttempt != "":
         st.caption(passwordStatistics[1])
 else:
     if len(st.session_state['uncoveredRules']) < len(st.session_state['ruleSet']) and st.session_state['lastRule'] != 'null':
-        st.badge(st.session_state['lastRule'], color="red")
+        st.badge(st.session_state['lastRule'], color="red", icon="❌")
     for rule in reversed(st.session_state['uncoveredRules']):
-        st.badge(rule, color="red")
+        st.badge(rule, color="red", icon="❌")
 
