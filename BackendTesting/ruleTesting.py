@@ -25,8 +25,9 @@ class passwordValidator:
         self.subscribe(ruleTen())
         self.subscribe(ruleEleven())
         self.subscribe(ruleTwelve())
-        self.subscribe(ruleWeaponType())
-        self.subscribe(ruleReplaceTenthChar())
+#        self.subscribe(ruleWeaponType())
+#        self.subscribe(ruleReplaceTenthChar())
+        self.subscribe(romanNumTest())
 
     def subscribe(self, rule: passwordRule) -> None:
         self._rules.append(rule)
@@ -185,6 +186,24 @@ class ruleReplaceTenthChar(passwordRule):
         if len(password) < 10:
             return False
         
-        # print("Password length:", len(password))
-        # print("10th character (index 9):", password[9])
+        print("Password length:", len(password))
+        print("10th character (index 9):", password[9])
         return password[9].lower() == chosen
+
+class romanNumTest(passwordRule):
+    description = "Contains Roman numerals that create a product of 50"
+    TARGET_PRODUCT = 50
+
+    def check(self, password: str) -> bool:
+        roman_values = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+
+        found = [roman_values[c] for c in password if c in roman_values]
+
+        if not found:
+            return False
+
+        product = 1
+        for value in found:
+            product *= value
+
+        return product == self.TARGET_PRODUCT
