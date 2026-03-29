@@ -48,7 +48,8 @@ st.markdown('<h1 style="font-family:\'Freckle Face\'; color:#ffbe45;">GAME</h1>'
 st.divider()
 
 #==================== Haggerty Code ====================#
-# Win: ug|h|a|H|lc😛|@|u|L/I+Iasteroidtrexmeatcavetaemclub
+# Win:  ug|h|a|H|lc😛|@|u|L/I+Iasteroidtrexmeatcavetaemclub
+#       ug|h|a|c|l|l|😛@|L/I+Iasteroidtrexmeatcavetaemspear
 
 #Smart rock, play evanescence
 #Smart rock, play cranberries
