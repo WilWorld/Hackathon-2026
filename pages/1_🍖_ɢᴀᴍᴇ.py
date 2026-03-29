@@ -47,8 +47,9 @@ st.divider()
 validator = passwordValidator()
 
 # Persistent variables (safe until referesh)
+if 'set_rules' not in st.session_state:
+    st.session_state['set_rules'] = validator.init_random_select()
 if 'ruleSet' not in st.session_state:
-    validator.init_random_select()
     st.session_state['ruleSet'] = validator.validate("initial")["descriptions"]
     print(st.session_state['ruleSet'])
     print(validator.validate("initial"))

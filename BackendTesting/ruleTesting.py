@@ -39,7 +39,7 @@ class passwordValidator:
                     ruleWeaponType()]
         
         for need in range(9): # 9 Random Rules are chosen
-            left = len(ruleLister)
+            left = len(ruleLister)-1
             print(left)
             randnum = random.randrange(0, left)
             self.subscribe(ruleLister[randnum])
