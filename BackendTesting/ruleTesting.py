@@ -142,7 +142,7 @@ class ruleTen(passwordRule):
 class ruleEleven(passwordRule):
      description = "The password must include a prehistoric animal" #animals: Megatherium, Camelops, and Aurochs
      def check(self, password: str) -> bool:
-          answer = ["megatherium", "camelops","aurochs", "sabertooth", "mammoth", "t-rex", "bear", "rhino", "Elk", "dinos", "saber-tooth", "stego", "lions", "tigers", "wolves"]
+          answer = ["megatherium", "camelops","aurochs", "sabertooth", "mammoth", "t-rex", "bear", "rhino", "Elk", "dino", "saber-tooth", "stego", "lion", "tiger", "wolf"]
           originalPas = password.lower()
           return any(animals in originalPas for animals in answer)
 
