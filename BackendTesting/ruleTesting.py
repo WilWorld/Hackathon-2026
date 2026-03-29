@@ -29,7 +29,7 @@ class passwordValidator:
         self.subscribe(ruleWeaponType())
         self.subscribe(ruleReplaceTenthChar())
         self.subscribe(romanNumTest())
-            
+
     def subscribe(self, rule: passwordRule) -> None:
         self._rules.append(rule)
     
@@ -47,9 +47,7 @@ class passwordValidator:
         for rule in self._rules:
             is_valid = rule.check(password)
             rule_name = rule.__class__.__name__
-            results.append(is_valid)
-
-            print("The result should have been appended: ", results[index])
+            results[index] = is_valid
 
             index += 1
 
@@ -59,13 +57,12 @@ class passwordValidator:
             if not is_valid:
                 all_valid = False
         
-        print("///THIS IS THE FINAL RESULT///", results)
         # print("/// DESCTIPTION ///", descriptions)
 
         return {
             'all_valid': all_valid,
             'results': results,
-            'descriptions': descriptions
+            'descriptions': descriptions,
         }
               
 # Concrete Observers
@@ -146,7 +143,7 @@ class ruleTen(passwordRule):
 class ruleEleven(passwordRule):
      description = "The password must include a prehistoric animal" #animals: Megatherium, Camelops, and Aurochs
      def check(self, password: str) -> bool:
-          answer = ["megatherium", "camelops","aurochs", "sabertooth", "mammoth", "t-rex", "bear", "rhino", "Elk", "dino", "saber-tooth", "stego", "lion", "tiger", "wolf"]
+          answer = ["megatherium", "camelops","aurochs", "sabertooth", "mammoth", "t-rex", "trex", "bear", "rhino", "Elk", "dino", "saber-tooth", "stego", "lion", "tiger", "wolf", "alligator"]
           originalPas = password.lower()
           return any(animals in originalPas for animals in answer)
 

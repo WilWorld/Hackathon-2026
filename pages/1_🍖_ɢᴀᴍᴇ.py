@@ -59,8 +59,6 @@ if 'validator' not in st.session_state:
 validator = st.session_state['validator']
 
 # Persistent variables (safe until referesh)
-if 'set_rules' not in st.session_state:
-    st.session_state['set_rules'] = validator.init_random_select()
 if 'ruleSet' not in st.session_state:
     st.session_state['ruleSet'] = validator.validate("initial")["descriptions"]
     print(st.session_state['ruleSet'])
@@ -135,6 +133,7 @@ if passwordAttempt != "":
     # Options for fail messages
     Failmessages = [
         "🧔🏽‍♀️ INCREDIBLE! I never see a password so horrid!",
+        "🧔🏽‍♀️ Smart rock, play evanescence",
         "🧔🏽‍♀️ Weak password bring shame to tribe",
         "🧔🏽‍♀️ Password so bad meal escape cage",
         "🧔🏽‍♀️ Mammoth child make better password than this",
@@ -169,31 +168,58 @@ if passwordAttempt != "":
     # Columns for splitting rules
     column1, column2 = st.columns(2)
 
-    # Display
-    index = len(st.session_state['uncoveredRules'])-1
-    if len(st.session_state['uncoveredRules']) < len(st.session_state['ruleSet']):
-        with column1:
-            st.badge(st.session_state['lastRule'], color="red",  icon="❌")
+    # /// Display ///
+    bool = True
+
+    ### CHARLIE, WHY WOULD YOU ALWAYS ASSUME THE LAST RULE IS WRONG????
+    #if len(st.session_state['uncoveredRules']) < len(st.session_state['ruleSet']):
+    #    with column1:
+    #        st.badge(st.session_state['lastRule'], color="red",  icon="❌")
     
-    # Split items here
-    bool = False
+    # Incorrect answers first
+    if not ruleResults[len(st.session_state['uncoveredRules'])]:
+        with column1:
+            st.badge(st.session_state['lastRule'], color="red", icon="❌")
+        bool = False
+    index = len(st.session_state['uncoveredRules'])-1
+    for rule in reversed(st.session_state['uncoveredRules']):
+        if not ruleResults[index]:
+            if bool:
+                with column1:
+                    st.badge(rule, color="red", icon="❌")
+                bool = False
+            else:
+                with column2:
+                    st.badge(rule, color="red", icon="❌")
+                bool = True
+        index -= 1
+
+    # Correct anwsers after
+    if ruleResults[len(st.session_state['uncoveredRules'])]:
+        if bool:
+            with column1:
+                st.badge(st.session_state['lastRule'], color="green", icon="✅")
+            bool = False
+        else:
+            with column2:
+                st.badge(st.session_state['lastRule'], color="green", icon="✅")
+            bool = True
+    index = len(st.session_state['uncoveredRules'])-1
     for rule in reversed(st.session_state['uncoveredRules']):
         if ruleResults[index]:
-            if bool == True:
+            if bool:
                 with column1:
                     st.badge(rule, color="green", icon="✅")
                 bool = False
             else:
                 with column2:
                     st.badge(rule, color="green", icon="✅")
-                bool = True
-        else:
-            st.badge(rule, color="red", icon="❌")
+                bool = True            
         index -= 1
+
 
     # Displays meaninful data on password attempts
     passwordStatistics = password_test(passwordAttempt)
-
     if len(passwordStatistics) > 2:
         col1_placeholder.caption(passwordStatistics[0])
         col2_placeholder.caption(passwordStatistics[1])
