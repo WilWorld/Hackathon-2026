@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-import random
+import random, re
 
 # observer abstract
 class passwordRule:
@@ -25,6 +25,7 @@ class passwordValidator:
         self.subscribe(ruleTen())
         self.subscribe(ruleEleven())
         self.subscribe(ruleTwelve())
+        self.subscribe(ruleThirteen())
         self.subscribe(ruleWeaponType())
         self.subscribe(ruleReplaceTenthChar())
         self.subscribe(romanNumTest())
@@ -154,6 +155,16 @@ class ruleTwelve(passwordRule):
           originalPas = password.lower()
           return any(live in originalPas for live in answer)
      
+# Rule 13 - Password must include a word in reverse order like moon -> noom
+class ruleThirteen(passwordRule):
+     description = "The password must include a word in reverse order like moon -> noom"
+     def check(self, password: str) -> bool:
+        word = re.findall(r'\b\w{3,}\b', password)
+        for words in word:
+            reversed = words[::-1]
+            if reversed in password and reversed != word:
+                return True
+        return False
 # What weapon?
 class ruleWeaponType(passwordRule):
     weapons = list(zip(
