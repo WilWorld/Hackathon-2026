@@ -108,8 +108,8 @@ with statsContainer:
 
 # Saves password state across the session
 passwordAttempt = st.text_input(
-    label="password",
-    placeholder="Type password here",
+    label="",
+    placeholder="Type password to start . . .",
     key="passwordAttempt"
 )
 st.session_state["password_saved"] = passwordAttempt
