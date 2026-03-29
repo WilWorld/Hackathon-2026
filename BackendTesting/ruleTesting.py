@@ -161,8 +161,9 @@ class ruleThirteen(passwordRule):
      def check(self, password: str) -> bool:
         word = re.findall(r'\b\w{3,}\b', password)
         for words in word:
+            print("😊 " + words + "\n")
             reversed = words[::-1]
-            if reversed in password and reversed != word:
+            if reversed in password and reversed != words:
                 return True
         return False
 # What weapon?
