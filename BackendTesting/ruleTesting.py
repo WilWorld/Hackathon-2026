@@ -137,7 +137,7 @@ class ruleNine(passwordRule):
 class ruleTen(passwordRule):
      description = "The password must include a food caveman would eat" #(choose one of them): meat, insect, and fruits
      def check(self, password: str) -> bool:
-          answer = ["meat", "insect", "fruits", "plant", "animal"]
+          answer = ["meat", "insect", "fruits", "plant", "animal", "bug"]
           originalPas = password.lower()
           return any(food in originalPas for food in answer)
 
