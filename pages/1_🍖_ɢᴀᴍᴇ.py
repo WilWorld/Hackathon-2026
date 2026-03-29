@@ -45,7 +45,9 @@ st.divider()
 #==================== Haggerty Code ====================#
 # Win: o|m|l|s|h|E|!|😀ugbigrock
 
-validator = passwordValidator()
+if 'validator' not in st.session_state:
+    st.session_state['validator'] = passwordValidator()
+validator = st.session_state['validator']
 
 # Persistent variables (safe until referesh)
 if 'ruleSet' not in st.session_state:
@@ -101,7 +103,7 @@ with statsContainer:
 
 # Saves password state across the session
 passwordAttempt = st.text_input(
-    label="",
+    label="password",
     placeholder="Type password here",
     key="passwordAttempt"
 )
