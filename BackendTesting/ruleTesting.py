@@ -8,6 +8,7 @@ class passwordRule:
     def check(self, password: str):
         """Return is_valid"""
         pass
+
 # subject
 class passwordValidator:
     def __init__(self):
@@ -21,6 +22,11 @@ class passwordValidator:
         self.subscribe(ruleSeven())
         self.subscribe(ruleEight())
         self.subscribe(ruleNine())
+        self.subscribe(ruleTen())
+        self.subscribe(ruleEleven())
+        self.subscribe(ruleTwelve())
+        self.subscribe(ruleWeaponType())
+        self.subscribe(ruleReplaceTenthChar())
 
     def subscribe(self, rule: passwordRule) -> None:
         self._rules.append(rule)
@@ -91,6 +97,7 @@ class ruleFour(passwordRule):
 # Rule 5 - special characters
 class ruleFive(passwordRule):
         description = "Contains at least one special character"
+
         def __init__(self, specialChar: str = "!@#$%^&*-_=+"):
              self.specialChar = specialChar
         def check(self, password: str) -> bool:
@@ -119,19 +126,36 @@ class ruleEight(passwordRule):
             originalPas = password.lower()
             return any(noise in originalPas for noise in answer)
 
-# Rule 9 - Password must be LESS than 45 characters
+# Rule 9 - Password must be LESS than 50 characters
 class ruleNine(passwordRule):
-        description = "Less than 35 characters"
+        description = "Less than 50 characters"
         def check(self, password: str) -> bool:
-            return len(password) <= 35
-
-#Must include the word "stick"
-class ruleNeighborStick(passwordRule):
-        description = "Must include the word stick"
-        def check(self, password: str) -> bool:
-            originalPas = password.lower()
-            return "stick" in originalPas
+            return len(password) <= 50
         
+# Rule 10 - Password must include a food caveman would eat (choose one of them): meat, insect, and fruits
+class ruleTen(passwordRule):
+     description = "The password must include a food caveman would eat (choose one of them): meat, insect, and fruits"
+     def check(self, password: str) -> bool:
+          answer = ["meat", "insect", "fruits"]
+          originalPas = password.lower()
+          return any(food in originalPas for food in answer)
+
+# Rule 11 - Choose from the following 
+class ruleEleven(passwordRule):
+     description = "The password must include one of the following a prehistoric animals: Megatherium, Camelops, and Aurochs"
+     def check(self, password: str) -> bool:
+          answer = ["megatherium", "camelops","aurochs"]
+          originalPas = password.lower()
+          return any(animals in originalPas for animals in answer)
+
+# Rule 12 - Must include a place where caveman live
+class ruleTwelve(passwordRule):
+     description = "The password must include a place where caveman live"
+     def check(self, password: str) -> bool:
+          answer = ["den", "cave", "hut"]
+          originalPas = password.lower()
+          return any(live in originalPas for live in answer)
+     
 # What weapon?
 class ruleWeaponType(passwordRule):
     weapon = ["A weapon with a long shaft and a pointed tip, typically of metal, used for thrusting or throwing.",
@@ -147,3 +171,20 @@ class ruleWeaponType(passwordRule):
         word = self.weapon_words[self.choice]
         originalPas = password.lower()
         return word in originalPas
+    
+# Replace 10th character
+class ruleReplaceTenthChar(passwordRule):
+     symbol = ["z", "o", "i", "a", "l", "c"]
+
+     def __init__(self):
+          self.choice = random.randint(0, 5)
+          self.description = "The tenth character must be " + self.symbol[self.choice]
+
+     def check(self, password: str) -> bool:
+        chosen = self.symbol[self.choice]
+        if len(password) < 10:
+            return False
+        
+        # print("Password length:", len(password))
+        # print("10th character (index 9):", password[9])
+        return password[9].lower() == chosen
