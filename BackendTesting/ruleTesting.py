@@ -115,33 +115,35 @@ class ruleSeven(passwordRule):
 class ruleEight(passwordRule):
         description = "What wiped out the dinos?"
         def check(self, password: str) -> bool:
-            answer = ["astroid", "bigrock"]
+            answer = ["asteroid", "bigrock"]
             originalPas = password.lower()
             return any(noise in originalPas for noise in answer)
 
 # Rule 9 - Password must be LESS than 45 characters
 class ruleNine(passwordRule):
-        description = "Less than 45 characters"
+        description = "Less than 35 characters"
         def check(self, password: str) -> bool:
-            return len(password) <= 45
+            return len(password) <= 35
 
-#Throwback rules     
 #Must include the word "stick"
-class ruleNeighborStick:
+class ruleNeighborStick(passwordRule):
         description = "Must include the word stick"
         def check(self, password: str) -> bool:
-            word = "stick"
             originalPas = password.lower()
-            return any(stick in originalPas for stick in word)
+            return "stick" in originalPas
+        
+# What weapon?
+class ruleWeaponType(passwordRule):
+    weapon = ["A weapon with a long shaft and a pointed tip, typically of metal, used for thrusting or throwing.",
+              "A short, blunt melee weapon crafted from wood, designed for striking, bashing, or bludgeoning in close-quarters combat",
+              "A gun causing injury or damage by the emission of rays."]
+    weapon_words = ["spear", "club", "raygun"]
 
-RANDOM_THROWBACKS_Rules =[
-     ruleNeighborStick
-]
+    def __init__(self):
+        self.choice = random.randint(0, 2)
+        self.description = "What weapon is this? " + self.weapon[self.choice]
 
-# Randomize the throwbacks 
-class RandomThrowbacks:
-     def __init__(self):
-          self.rule = random.choice(RANDOM_THROWBACKS_Rules)
-     
-     def check(self, password):
-          return self.rule.check(password)
+    def check(self, password: str) -> bool:
+        word = self.weapon_words[self.choice]
+        originalPas = password.lower()
+        return word in originalPas
