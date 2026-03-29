@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-import random
+import random, re
 
 # observer abstract
 class passwordRule:
@@ -8,21 +8,27 @@ class passwordRule:
     def check(self, password: str):
         """Return is_valid"""
         pass
+
 # subject
 class passwordValidator:
     def __init__(self):
-       self._rules: List[passwordRule] = []
-       #self.subscribe(ruleOne())
-       #self.subscribe(ruleTwo())
-       #self.subscribe(ruleThree())
-       #self.subscribe(ruleFour())
-       #self.subscribe(ruleFive())
-       #self.subscribe(ruleSix())
-       #self.subscribe(ruleSeven())
-       #self.subscribe(ruleEight())
-       #self.subscribe(ruleNine())
-       #self.subscribe(ruleNeighborStick())
-       #self.subscribe(ruleWeaponType())
+        self._rules: List[passwordRule] = []
+        self.subscribe(ruleOne())
+        self.subscribe(ruleTwo())
+        self.subscribe(ruleThree())
+        self.subscribe(ruleFour())
+        self.subscribe(ruleFive())
+        self.subscribe(ruleSix())
+        self.subscribe(ruleSeven())
+        self.subscribe(ruleEight())
+        self.subscribe(ruleNine())
+        self.subscribe(ruleTen())
+        self.subscribe(ruleEleven())
+        self.subscribe(ruleTwelve())
+        self.subscribe(ruleThirteen())
+        self.subscribe(ruleWeaponType())
+        self.subscribe(ruleReplaceTenthChar())
+        self.subscribe(romanNumTest())
 
     def init_random_select(self):
         # Add rule to be randomly selected
@@ -48,18 +54,13 @@ class passwordValidator:
             
     def subscribe(self, rule: passwordRule) -> None:
         self._rules.append(rule)
-        print("new rule added")
     
     def unsub(self, rule: passwordRule) -> None:
         self._rules.remove(rule)
-        print("Removed rule")
     
     # Validates all the rules built into the validator, will return arrays of descriptions and booleans
     def validate(self, password: str) -> dict:
-        """Notify all rules and collect results"""
-        print("::HE HAS ACTIVATED VALIDATE:: ", password)
-        print("his rules: ", self._rules)
-        results = []
+        results = {}
         rule_name = []
         descriptions = []
         all_valid = True
@@ -120,16 +121,17 @@ class ruleFour(passwordRule):
 # Rule 5 - special characters
 class ruleFive(passwordRule):
         description = "Contains at least one special character"
-        def __init__(self, specialChar: str = "!@#$%^&*-_=+"):
+
+        def __init__(self, specialChar: str = "!@#$%^&*-_=+():[]"):
              self.specialChar = specialChar
         def check(self, password: str) -> bool:
             return any(c in self.specialChar for c in password)
               
 # Rule 6 - Must include one of the following caveman noises (ug, gr, oga)
 class ruleSix(passwordRule):
-        description = "Includes caveman noise (ug, gr, or oga)"
+        description = "Includes caveman noise" #(ug, gr, or oga)
         def check(self, password: str) -> bool:
-            cavemanNoise = ["ug", "gr", "oga"]
+            cavemanNoise = ["ug", "gr", "oga", "ooga", "booga", "grr"]
             originalPas = password.lower()
             return any(noise in originalPas for noise in cavemanNoise)
               
@@ -144,36 +146,92 @@ class ruleSeven(passwordRule):
 class ruleEight(passwordRule):
         description = "What wiped out the dinos?"
         def check(self, password: str) -> bool:
-            answer = ["asteroid", "bigrock"]
+            answer = ["asteroid", "bigrock", "meteor", "meteoroid", "meteorite"]
             originalPas = password.lower()
             return any(noise in originalPas for noise in answer)
 
-# Rule 9 - Password must be LESS than 45 characters
+# Rule 9 - Password must be LESS than 50 characters
 class ruleNine(passwordRule):
-        description = "Less than 35 characters"
+        description = "Less than 50 characters"
         def check(self, password: str) -> bool:
-            return len(password) <= 35
-
-#Must include the word "stick"
-class ruleNeighborStick(passwordRule):
-        description = "Must include the word stick"
-        def check(self, password: str) -> bool:
-            originalPas = password.lower()
-            return "stick" in originalPas
+            return len(password) <= 50
         
+# Rule 10 - Password must include a food caveman would eat (choose one of them): meat, insect, and fruits
+class ruleTen(passwordRule):
+     description = "The password must include a food caveman would eat" #(choose one of them): meat, insect, and fruits
+     def check(self, password: str) -> bool:
+          answer = ["meat", "insect", "fruits", "plant", "animal", "bug"]
+          originalPas = password.lower()
+          return any(food in originalPas for food in answer)
+
+# Rule 11 - Choose from the following 
+class ruleEleven(passwordRule):
+     description = "The password must include a prehistoric animal" #animals: Megatherium, Camelops, and Aurochs
+     def check(self, password: str) -> bool:
+          answer = ["megatherium", "camelops","aurochs", "sabertooth", "mammoth", "t-rex", "bear", "rhino", "Elk", "dino", "saber-tooth", "stego", "lion", "tiger", "wolf"]
+          originalPas = password.lower()
+          return any(animals in originalPas for animals in answer)
+
+# Rule 12 - Must include a place where caveman live
+class ruleTwelve(passwordRule):
+     description = "The password must include a place where caveman live"
+     def check(self, password: str) -> bool:
+          answer = ["den", "cave", "hut"]
+          originalPas = password.lower()
+          return any(live in originalPas for live in answer)
+     
+# Rule 13 - Password must include a word in reverse order like moon -> noom
+class ruleThirteen(passwordRule):
+     description = "The password must include a word in reverse order like moon -> noom"
+     def check(self, password: str) -> bool:
+        word = re.findall(r'\b\w{3,}\b', password)
+        for words in word:
+            print("😊 " + words + "\n")
+            reversed = words[::-1]
+            if reversed in password and reversed != words:
+                return True
+        return False
 # What weapon?
 class ruleWeaponType(passwordRule):
-    weapon = ["A weapon with a long shaft and a pointed tip, typically of metal, used for thrusting or throwing.",
-              "A short, blunt melee weapon crafted from wood, designed for striking, bashing, or bludgeoning in close-quarters combat",
-              "A gun causing injury or damage by the emission of rays."]
-    weapon_words = ["spear", "club", "raygun"]
+    weapons = list(zip(
+        ["A weapon with a long shaft and a pointed tip, typically of metal, used for thrusting or throwing.",
+         "A short, blunt melee weapon crafted from wood, designed for striking, bashing, or bludgeoning in close-quarters combat",
+         "A gun causing injury or damage by the emission of rays."],
+        ["spear", "club", "raygun"]
+    ))
 
     def __init__(self):
-        self.choice = random.randint(0, 2)
-        self.description = "What weapon is this? " + self.weapon[self.choice]
+        self.choice = random.choice(self.weapons)
+        self.description = "What weapon is this? " + self.choice[0]
 
     def check(self, password: str) -> bool:
-        word = self.weapon_words[self.choice]
-        originalPas = password.lower()
-        return word in originalPas
+        return self.choice[1] in password.lower()
     
+# Replace 10th character
+class ruleReplaceTenthChar(passwordRule):
+     symbol = ["z", "o", "i", "a", "l", "c"]
+
+     def __init__(self):
+          self.choice = random.randint(0, 5)
+          self.description = "The tenth character must be " + self.symbol[self.choice]
+
+     def check(self, password: str) -> bool:
+        chosen = self.symbol[self.choice]
+        if len(password) < 10:
+            return False
+
+        return password[9].lower() == chosen
+
+class romanNumTest(passwordRule):
+    description = "Contains Roman numerals that create a product of 50 [I, V, X, L, C, D, M]"
+    TARGET_PRODUCT = 50
+
+    def check(self, password: str) -> bool:
+        roman_values = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+        found = [roman_values[c] for c in password if c in roman_values]
+        if not found:
+            return False
+        product = 1
+        for value in found:
+            product *= value
+        return product == self.TARGET_PRODUCT

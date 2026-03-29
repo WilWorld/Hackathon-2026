@@ -1,6 +1,8 @@
 import streamlit as st
 from BackendTesting.ruleTesting import passwordValidator
 from BackendTesting.zxcvbnTesting import password_test
+import re
+import random
 
 # Page styling
 st.markdown(
@@ -14,8 +16,16 @@ st.markdown(
         font-size: 110%;
         font-weight: bold;
     }
+    [class="stVerticalBlock st-emotion-cache-1gz5zxc e12zf7d53"] {
+        background-color: #8C5F1E;  
+    }
     [data-testid="stSidebar"] * {
         color: #fff;  
+    }
+    [class="stMarkdownBadge"] {
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow-wrap: anywhere !important;
     }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Freckle+Face" rel="stylesheet">
@@ -44,7 +54,9 @@ st.divider()
 #Smart rock, play cranberries
 #Smart rock, play radiohead
 
-validator = passwordValidator()
+if 'validator' not in st.session_state:
+    st.session_state['validator'] = passwordValidator()
+validator = st.session_state['validator']
 
 # Persistent variables (safe until referesh)
 if 'set_rules' not in st.session_state:
@@ -59,6 +71,10 @@ if 'lastRule' not in st.session_state:
     st.session_state['lastRule'] = 'null'
 if 'numberOfAttempts' not in st.session_state:
     st.session_state['numberOfAttempts'] = 0
+if "password_saved" not in st.session_state:
+    st.session_state["password_saved"] = ""
+if 'passwordAttempt' not in st.session_state:
+    st.session_state['passwordAttempt'] = st.session_state["password_saved"]
 
 # Check if a new rule is correct
 def find_uncovered(ruleResults):
@@ -85,8 +101,27 @@ def get_ruleResults_sum(ruleResults, ruleRange):
     print("rrsum: ", rrsum)
     return rrsum
 
-# Refereshes every password attempt
-passwordAttempt = st.text_input("Put in that p-ass (word)")
+# Stats container positioning
+statsContainer = st.container(border=True, gap="small")
+with statsContainer:
+    col1, col2, col3 = st.columns(3)
+    
+    col1_placeholder = col1.empty()
+    col2_placeholder = col2.empty()
+    col3_placeholder = col3.empty()
+
+    col1_placeholder.caption("Time: --")
+    col2_placeholder.caption("Guesses: --")
+    col3_placeholder.caption("Score: --")
+
+# Saves password state across the session
+passwordAttempt = st.text_input(
+    label="",
+    placeholder="Type password to start . . .",
+    key="passwordAttempt"
+)
+st.session_state["password_saved"] = passwordAttempt
+
 if passwordAttempt != "":
     ruleResults = validator.validate(passwordAttempt)['results']
     print("password: ", passwordAttempt)
@@ -97,36 +132,89 @@ if passwordAttempt != "":
 
     print("LENGTH OF RULERESULTS", len(ruleResults))
 
+    # Options for fail messages
+    Failmessages = [
+        "🧔🏽‍♀️ INCREDIBLE! I never see a password so horrid!",
+        "🧔🏽‍♀️ Weak password bring shame to tribe",
+        "🧔🏽‍♀️ Password so bad meal escape cage",
+        "🧔🏽‍♀️ Mammoth child make better password than this",
+        "🧔🏽‍♀️ Password weak. Even sleepy mammoth guess this.",
+        "🧔🏽‍♀️ Bad password. Cave baby break in.",
+        "🧔🏽‍♀️ You make soft password. No keep tribe safe.",
+        "🧔🏽‍♀️ Tiny brain password. Enemy laugh.",
+        "🧔🏽‍♀️ Password weak like wet stick.",
+        "🧔🏽‍♀️ This password weak. One bonk and enemy inside cave.",
+        "🧔🏽‍♀️ You choose bad password. Even slow turtle guess.",
+        "🧔🏽‍♀️ Tribe not safe. Password crumble like old bone.",
+        "🧔🏽‍♀️ Hunter spot this password from far away.",
+        "🧔🏽‍♀️ No good. Password softer than mud.",
+        "🧔🏽‍♀️ Enemy guess this fast. You must think harder.",
+        "🧔🏽‍♀️ Too easy. Even rock know this password.",
+        "🧔🏽‍♀️ Password small. Danger come.",
+        "🧔🏽‍♀️ Weak password bring shame to tribe.",
+        "🧔🏽‍♀️ No. Try again. Use bigger brain.",
+        "🧔🏽‍♀️ Password weak. Tribe in danger.",
+        "🧔🏽‍♀️ Bad password. Mammoth walk right in.",
+        "🧔🏽‍♀️ Too easy. Cave door wide open.",
+        "🧔🏽‍♀️ Enemy guess this before fire start.",
+        "🧔🏽‍♀️ Weak. Try again with big brain."
+    ]
+
     # Win/fail message
     if get_ruleResults_sum(ruleResults, len(ruleResults)) == len(ruleResults):
-        st.write("WOW! You did it! Now your rocks and stone are secure :L)")
+        st.caption("WOW! You did it! Now your rocks and stone are secure")
     else:
-        st.write("INCREDIBLE! I've never seen a passoword so horrid and insecure!")
+        st.caption(random.choice(Failmessages))
+
+    # Columns for splitting rules
+    column1, column2 = st.columns(2)
 
     # Display
     index = len(st.session_state['uncoveredRules'])-1
     if len(st.session_state['uncoveredRules']) < len(st.session_state['ruleSet']):
-        st.badge(st.session_state['lastRule'], color="red")
+        with column1:
+            st.badge(st.session_state['lastRule'], color="red",  icon="❌")
+    
+    # Split items here
+    bool = False
     for rule in reversed(st.session_state['uncoveredRules']):
         if ruleResults[index]:
-            st.badge(rule, color="green")
+            if bool == True:
+                with column1:
+                    st.badge(rule, color="green", icon="✅")
+                bool = False
+            else:
+                with column2:
+                    st.badge(rule, color="green", icon="✅")
+                bool = True
         else:
-            st.badge(rule, color="red")
+            st.badge(rule, color="red", icon="❌")
         index -= 1
 
-    ### CHARLIE MAKE THE SPACE BETWEEN THE LINES SMALLER!!!!!!
-            # -ME
+    # Displays meaninful data on password attempts
     passwordStatistics = password_test(passwordAttempt)
+
     if len(passwordStatistics) > 2:
-        st.caption(passwordStatistics[0])
-        st.caption(passwordStatistics[1])
-        st.caption(passwordStatistics[2])
+        col1_placeholder.caption(passwordStatistics[0])
+        col2_placeholder.caption(passwordStatistics[1])
+        match = re.search(r"\[(.*?)\]", passwordStatistics[2])
+        if match:
+            score_text = match.group(1)
+            color_map = {
+                "very weak": "violet",
+                "weak": "red",
+                "fair": "orange",
+                "strong": "yellow",
+                "very strong": "green"
+            }
+            col3_placeholder.caption(f"Score: :{color_map.get(score_text, 'white')}[{score_text}]")
     else:
-        st.caption(passwordStatistics[0])
-        st.caption(passwordStatistics[1])
+        col1_placeholder.caption(passwordStatistics[0])
+        col2_placeholder.caption(passwordStatistics[1])
+        col3_placeholder.caption("Score: --")
 else:
     if len(st.session_state['uncoveredRules']) < len(st.session_state['ruleSet']) and st.session_state['lastRule'] != 'null':
-        st.badge(st.session_state['lastRule'], color="red")
+        st.badge(st.session_state['lastRule'], color="red", icon="❌")
     for rule in reversed(st.session_state['uncoveredRules']):
-        st.badge(rule, color="red")
+        st.badge(rule, color="red", icon="❌")
 
