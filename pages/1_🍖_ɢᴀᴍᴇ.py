@@ -40,6 +40,10 @@ st.divider()
 #==================== Haggerty Code ====================#
 # Win: o|m|l|s|h|E|!|😀ugbigrock
 
+#Smart rock, play evanescence
+#Smart rock, play cranberries
+#Smart rock, play radiohead
+
 validator = passwordValidator()
 
 # Persistent variables (safe until referesh)
@@ -47,6 +51,7 @@ if 'ruleSet' not in st.session_state:
     validator.init_random_select()
     st.session_state['ruleSet'] = validator.validate("initial")["descriptions"]
     print(st.session_state['ruleSet'])
+    print(validator.validate("initial"))
 if 'uncoveredRules' not in st.session_state:
     st.session_state['uncoveredRules'] = []
 if 'lastRule' not in st.session_state:  
@@ -82,7 +87,11 @@ def get_ruleResults_sum(ruleResults, ruleRange):
 # Refereshes every password attempt
 passwordAttempt = st.text_input("Put in that p-ass (word)")
 if passwordAttempt != "":
-    ruleResults = validator.validate(passwordAttempt)["results"]
+    ruleResults = validator.validate(passwordAttempt)['results']
+    print("password: ", passwordAttempt)
+    print("results: ", ruleResults)
+    print("the whole thing: ", validator.validate(passwordAttempt))
+    print("jsut results: ", validator.validate(passwordAttempt)['results'])
     find_uncovered(ruleResults)
 
     print("LENGTH OF RULERESULTS", len(ruleResults))

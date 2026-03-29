@@ -26,24 +26,25 @@ class passwordValidator:
 
     def init_random_select(self):
         # Add rule to be randomly selected
-        ruleList = [ruleOne,
-                    ruleTwo,
-                    ruleThree,
-                    ruleFour,
-                    ruleFive,
-                    ruleSix,
-                    ruleSeven,
-                    ruleEight,
-                    ruleNine,
-                    ruleNeighborStick,
-                    ruleWeaponType]
+        ruleLister = [ruleOne(),
+                    ruleTwo(),
+                    ruleThree(),
+                    ruleFour(),
+                    ruleFive(),
+                    ruleSix(),
+                    ruleSeven(),
+                    ruleEight(),
+                    ruleNine(),
+                    ruleNeighborStick(),
+                    ruleWeaponType()]
         
         for need in range(9): # 9 Random Rules are chosen
-            left = len(ruleList)
+            left = len(ruleLister)
             print(left)
-            randnum = random.randrange(1, left)-1
-            self.subscribe(ruleList[randnum]())
-            del ruleList[randnum]
+            randnum = random.randrange(0, left)
+            self.subscribe(ruleLister[randnum])
+            ruleLister.remove(ruleLister[randnum])
+        return True
             
     def subscribe(self, rule: passwordRule) -> None:
         self._rules.append(rule)
@@ -56,7 +57,9 @@ class passwordValidator:
     # Validates all the rules built into the validator, will return arrays of descriptions and booleans
     def validate(self, password: str) -> dict:
         """Notify all rules and collect results"""
-        results = {}
+        print("::HE HAS ACTIVATED VALIDATE:: ", password)
+        print("his rules: ", self._rules)
+        results = []
         rule_name = []
         descriptions = []
         all_valid = True
@@ -65,7 +68,9 @@ class passwordValidator:
         for rule in self._rules:
             is_valid = rule.check(password)
             rule_name = rule.__class__.__name__
-            results[index] = is_valid
+            results.append(is_valid)
+
+            print("The result should have been appended: ", results[index])
 
             index += 1
 
@@ -75,12 +80,13 @@ class passwordValidator:
             if not is_valid:
                 all_valid = False
         
+        print("///THIS IS THE FINAL RESULT///", results)
         # print("/// DESCTIPTION ///", descriptions)
 
         return {
             'all_valid': all_valid,
             'results': results,
-            'descriptions': descriptions,
+            'descriptions': descriptions
         }
               
 # Concrete Observers
