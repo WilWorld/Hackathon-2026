@@ -48,7 +48,7 @@ st.markdown('<h1 style="font-family:\'Freckle Face\'; color:#ffbe45;">GAME</h1>'
 st.divider()
 
 #==================== Haggerty Code ====================#
-# Win: ug|h|a|H|c😛|@|u|gL/I+Iasteroidtrexmeatcavetaemclub
+# Win: ug|h|a|H|lc😛|@|u|L/I+Iasteroidtrexmeatcavetaemclub
 
 #Smart rock, play evanescence
 #Smart rock, play cranberries
@@ -172,7 +172,7 @@ if passwordAttempt != "":
     bool = True
 
     # Incorrect answers first
-    if len(st.session_state['uncoveredRules']) < len(ruleResults) and not ruleResults[len(st.session_state['uncoveredRules'])]:
+    if len(st.session_state['uncoveredRules']) < len(ruleResults) and not ruleResults[len(st.session_state['uncoveredRules'])] and st.session_state['lastRule'] != 'null':
         with column1:
             st.badge(st.session_state['lastRule'], color="red", icon="❌")
         bool = False
@@ -237,8 +237,9 @@ else:
     column1, column2 = st.columns(2)
     bool = False
 
-    with column1:
-        st.badge(st.session_state['lastRule'], color="red", icon="❌")
+    if st.session_state['lastRule'] != 'null':
+        with column1:
+           st.badge(st.session_state['lastRule'], color="red", icon="❌")
     index = len(st.session_state['uncoveredRules'])-1
     for rule in reversed(st.session_state['uncoveredRules']):
         if bool:
