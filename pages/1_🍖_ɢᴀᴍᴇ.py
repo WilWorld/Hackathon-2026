@@ -48,7 +48,7 @@ st.markdown('<h1 style="font-family:\'Freckle Face\'; color:#ffbe45;">GAME</h1>'
 st.divider()
 
 #==================== Haggerty Code ====================#
-# Win: o|m|l|s|h|E|!|😀ugbigrock
+# Win: ug|h|a|H|c😛|@|u|gL/I+Iasteroidtrexmeatcavetaemclub
 
 #Smart rock, play evanescence
 #Smart rock, play cranberries
@@ -133,7 +133,7 @@ if passwordAttempt != "":
     # Options for fail messages
     Failmessages = [
         "🧔🏽‍♀️ INCREDIBLE! I never see a password so horrid!",
-        "🧔🏽‍♀️ Smart rock, play evanescence",
+        "🪨 Smart rock, play evanescence",
         "🧔🏽‍♀️ Weak password bring shame to tribe",
         "🧔🏽‍♀️ Password so bad meal escape cage",
         "🧔🏽‍♀️ Mammoth child make better password than this",
@@ -161,7 +161,7 @@ if passwordAttempt != "":
 
     # Win/fail message
     if get_ruleResults_sum(ruleResults, len(ruleResults)) == len(ruleResults):
-        st.caption("WOW! You did it! Now your rocks and stone are secure")
+        st.info("WOW! You did it! Now your rocks and stone are secure")
     else:
         st.caption(random.choice(Failmessages))
 
@@ -171,13 +171,8 @@ if passwordAttempt != "":
     # /// Display ///
     bool = True
 
-    ### CHARLIE, WHY WOULD YOU ALWAYS ASSUME THE LAST RULE IS WRONG????
-    #if len(st.session_state['uncoveredRules']) < len(st.session_state['ruleSet']):
-    #    with column1:
-    #        st.badge(st.session_state['lastRule'], color="red",  icon="❌")
-    
     # Incorrect answers first
-    if not ruleResults[len(st.session_state['uncoveredRules'])]:
+    if len(st.session_state['uncoveredRules']) < len(ruleResults) and not ruleResults[len(st.session_state['uncoveredRules'])]:
         with column1:
             st.badge(st.session_state['lastRule'], color="red", icon="❌")
         bool = False
@@ -195,7 +190,7 @@ if passwordAttempt != "":
         index -= 1
 
     # Correct anwsers after
-    if ruleResults[len(st.session_state['uncoveredRules'])]:
+    if len(st.session_state['uncoveredRules']) < len(ruleResults) and ruleResults[len(st.session_state['uncoveredRules'])]:
         if bool:
             with column1:
                 st.badge(st.session_state['lastRule'], color="green", icon="✅")
@@ -239,8 +234,20 @@ if passwordAttempt != "":
         col2_placeholder.caption(passwordStatistics[1])
         col3_placeholder.caption("Score: --")
 else:
-    if len(st.session_state['uncoveredRules']) < len(st.session_state['ruleSet']) and st.session_state['lastRule'] != 'null':
+    column1, column2 = st.columns(2)
+    bool = False
+
+    with column1:
         st.badge(st.session_state['lastRule'], color="red", icon="❌")
+    index = len(st.session_state['uncoveredRules'])-1
     for rule in reversed(st.session_state['uncoveredRules']):
-        st.badge(rule, color="red", icon="❌")
+        if bool:
+            with column1:
+                st.badge(rule, color="red", icon="❌")
+            bool = False
+        else:
+            with column2:
+                st.badge(rule, color="red", icon="❌")
+            bool = True
+        index -= 1
 
