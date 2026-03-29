@@ -1,6 +1,7 @@
 import streamlit as st
 from BackendTesting.ruleTesting import passwordValidator
 from BackendTesting.zxcvbnTesting import password_test
+import re
 
 # Page styling
 st.markdown(
@@ -113,11 +114,25 @@ if passwordAttempt != "":
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.caption(passwordStatistics[0])
-                print(passwordStatistics[0])
             with col2:
                 st.caption(passwordStatistics[1])
             with col3:
-                st.caption(passwordStatistics[2])
+                match = re.search(r"\[(.*?)\]", passwordStatistics[2])
+                
+                if match:
+                    if match.group(1) == "very weak":
+                        st.caption("Score: :violet[very weak]")
+                    elif match.group(1) == "weak":
+                        st.caption("Score: :red[weak]")
+                    elif match.group(1) == "fair":
+                        st.caption("Score: :orange[fair]")
+                    elif match.group(1) == "strong":
+                        st.caption("Score: :yellow[strong]")
+                    elif match.group(1) == "very strong":
+                        st.caption("Score: :green[very strong]")
+                    else:
+                        st.caption("error!")
+                        print(match.group(1))
     else:
         st.caption(passwordStatistics[0])
         st.caption(passwordStatistics[1])
