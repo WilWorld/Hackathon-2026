@@ -14,6 +14,9 @@ st.markdown(
         font-size: 110%;
         font-weight: bold;
     }
+    [class="stVerticalBlock st-emotion-cache-1gz5zxc e12zf7d53"] {
+        background-color: #8C5F1E;  
+    }
     [data-testid="stSidebar"] * {
         color: #fff;  
     }
@@ -94,21 +97,27 @@ if passwordAttempt != "":
     # Display
     index = len(st.session_state['uncoveredRules'])-1
     if len(st.session_state['uncoveredRules']) < len(st.session_state['ruleSet']):
-        st.badge(st.session_state['lastRule'], color="red")
+        st.badge(st.session_state['lastRule'], color="red",  icon="❌")
     for rule in reversed(st.session_state['uncoveredRules']):
         if ruleResults[index]:
-            st.badge(rule, color="green")
+            st.badge(rule, color="green", icon="✅")
         else:
-            st.badge(rule, color="red")
+            st.badge(rule, color="red", icon="❌")
         index -= 1
 
     ### CHARLIE MAKE THE SPACE BETWEEN THE LINES SMALLER!!!!!!
             # -ME
     passwordStatistics = password_test(passwordAttempt)
     if len(passwordStatistics) > 2:
-        st.caption(passwordStatistics[0])
-        st.caption(passwordStatistics[1])
-        st.caption(passwordStatistics[2])
+        with st.container(border=True, gap="small"):
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.caption(passwordStatistics[0])
+                print(passwordStatistics[0])
+            with col2:
+                st.caption(passwordStatistics[1])
+            with col3:
+                st.caption(passwordStatistics[2])
     else:
         st.caption(passwordStatistics[0])
         st.caption(passwordStatistics[1])
