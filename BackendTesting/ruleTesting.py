@@ -106,9 +106,9 @@ class ruleFive(passwordRule):
               
 # Rule 6 - Must include one of the following caveman noises (ug, gr, oga)
 class ruleSix(passwordRule):
-        description = "Includes caveman noise (ug, gr, or oga)"
+        description = "Includes caveman noise" #(ug, gr, or oga)
         def check(self, password: str) -> bool:
-            cavemanNoise = ["ug", "gr", "oga"]
+            cavemanNoise = ["ug", "gr", "oga", "ooga", "booga", "grr"]
             originalPas = password.lower()
             return any(noise in originalPas for noise in cavemanNoise)
               
@@ -123,7 +123,7 @@ class ruleSeven(passwordRule):
 class ruleEight(passwordRule):
         description = "What wiped out the dinos?"
         def check(self, password: str) -> bool:
-            answer = ["asteroid", "bigrock"]
+            answer = ["asteroid", "bigrock", "meteor", "meteoroid", "meteorite"]
             originalPas = password.lower()
             return any(noise in originalPas for noise in answer)
 
@@ -135,17 +135,17 @@ class ruleNine(passwordRule):
         
 # Rule 10 - Password must include a food caveman would eat (choose one of them): meat, insect, and fruits
 class ruleTen(passwordRule):
-     description = "The password must include a food caveman would eat (choose one of them): meat, insect, and fruits"
+     description = "The password must include a food caveman would eat" #(choose one of them): meat, insect, and fruits
      def check(self, password: str) -> bool:
-          answer = ["meat", "insect", "fruits"]
+          answer = ["meat", "insect", "fruits", "plant", "animal"]
           originalPas = password.lower()
           return any(food in originalPas for food in answer)
 
 # Rule 11 - Choose from the following 
 class ruleEleven(passwordRule):
-     description = "The password must include one of the following a prehistoric animals: Megatherium, Camelops, and Aurochs"
+     description = "The password must include one of the following a prehistoric animal" #animals: Megatherium, Camelops, and Aurochs
      def check(self, password: str) -> bool:
-          answer = ["megatherium", "camelops","aurochs"]
+          answer = ["megatherium", "camelops","aurochs", "sabertooth", "mammoth", "t-rex", "bear"]
           originalPas = password.lower()
           return any(animals in originalPas for animals in answer)
 
@@ -191,7 +191,7 @@ class ruleReplaceTenthChar(passwordRule):
         return password[9].lower() == chosen
 
 class romanNumTest(passwordRule):
-    description = "Contains Roman numerals that create a product of 50"
+    description = "Contains Roman numerals that create a product of 50 [I, V, X, L, C, D, M]"
     TARGET_PRODUCT = 50
 
     def check(self, password: str) -> bool:
