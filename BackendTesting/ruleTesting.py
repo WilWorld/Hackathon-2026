@@ -8,11 +8,19 @@ class passwordRule:
     def check(self, password: str):
         """Return is_valid"""
         pass
-    
 # subject
 class passwordValidator:
     def __init__(self):
         self._rules: List[passwordRule] = []
+        self.subscribe(ruleOne())
+        self.subscribe(ruleTwo())
+        self.subscribe(ruleThree())
+        self.subscribe(ruleFour())
+        self.subscribe(ruleFive())
+        self.subscribe(ruleSix())
+        self.subscribe(ruleSeven())
+        self.subscribe(ruleEight())
+        self.subscribe(ruleNine())
 
     def subscribe(self, rule: passwordRule) -> None:
         self._rules.append(rule)
@@ -22,6 +30,7 @@ class passwordValidator:
         self._rules.remove(rule)
         print("Removed rule")
     
+    # Validates all the rules built into the validator, will return arrays of descriptions and booleans
     def validate(self, password: str) -> dict:
         """Notify all rules and collect results"""
         results = {}
@@ -29,6 +38,7 @@ class passwordValidator:
         descriptions = []
         all_valid = True
         
+        index = 0
         for rule in self._rules:
             is_valid = rule.check(password)
             rule_name = rule.__class__.__name__
@@ -49,18 +59,17 @@ class passwordValidator:
             'results': results,
             'descriptions': descriptions,
         }
-    
-    def checkRule(self, rule: passwordRule, password: str) -> bool:
-        return rule.check(password)
               
 # Concrete Observers
 # Rule 1 - at Least 12 characters
 class ruleOne(passwordRule):
+        description = "At least 12 characters"
         def check(self, password: str) -> bool:
             return len(password) >= 12
         
 # Rule 2 - Must have a big letter
 class ruleTwo(passwordRule):
+        description = "At least one uppercase letter"
         def check(self, password: str) -> bool:
             return any(c.isupper() for c in password)
              
@@ -72,6 +81,7 @@ class ruleThree(passwordRule):
              
 # Rule 4 - no repeating characters
 class ruleFour(passwordRule):
+        description = "No consecutive repeating characters"
         def check(self, password: str) -> bool:
             for i in range(len(password) - 1):
                 if password[i] == password[i+1]:
@@ -80,6 +90,7 @@ class ruleFour(passwordRule):
              
 # Rule 5 - special characters
 class ruleFive(passwordRule):
+        description = "Contains at least one special character"
         def __init__(self, specialChar: str = "!@#$%^&*-_=+"):
              self.specialChar = specialChar
         def check(self, password: str) -> bool:
@@ -87,6 +98,7 @@ class ruleFive(passwordRule):
               
 # Rule 6 - Must include one of the following caveman noises (ug, gr, oga)
 class ruleSix(passwordRule):
+        description = "Includes caveman noise (ug, gr, or oga)"
         def check(self, password: str) -> bool:
             cavemanNoise = ["ug", "gr", "oga"]
             originalPas = password.lower()
@@ -94,6 +106,7 @@ class ruleSix(passwordRule):
               
 # Rule 7 - Tallies must equal 7
 class ruleSeven(passwordRule):
+        description = "Contains exactly 7 tally marks '|'"
         def check(self, password: str) -> bool:
             tallyCount = password.count('|')
             return tallyCount == 7
