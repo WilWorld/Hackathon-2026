@@ -150,7 +150,7 @@ if passwordAttempt != "":
 
     # Win/fail message
     if get_ruleResults_sum(ruleResults, len(ruleResults)) == len(ruleResults):
-        st.write("WOW! You did it! Now your rocks and stone are secure")
+        st.caption("WOW! You did it! Now your rocks and stone are secure")
     else:
         st.caption(random.choice(Failmessages))
 
