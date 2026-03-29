@@ -52,7 +52,7 @@ class passwordValidator:
             if not is_valid:
                 all_valid = False
         
-        print("/// DESCTIPTION ///", descriptions)
+        # print("/// DESCTIPTION ///", descriptions)
 
         return {
             'all_valid': all_valid,
@@ -113,65 +113,31 @@ class ruleSeven(passwordRule):
 
 # Rule 8 - what killed the dinosaurs?
 class ruleEight(passwordRule):
-        description = "Contains dinosaur killer keyword (astroid or bigrock)"
+        description = "What wiped out the dinos?"
         def check(self, password: str) -> bool:
             answer = ["astroid", "bigrock"]
             originalPas = password.lower()
             return any(noise in originalPas for noise in answer)
 
-# Rule 9 - Password must be LESS than 25 characters
+# Rule 9 - Password must be LESS than 45 characters
 class ruleNine(passwordRule):
-        description = "Less than 30 characters"
+        description = "Less than 45 characters"
         def check(self, password: str) -> bool:
-            return len(password) <= 30
+            return len(password) <= 45
 
-#Throwback rules
-# Tenth character must be Z
-class ruleOneCharZ(passwordRule):
-        def check(self, password: str) -> bool:    
-            return password[9] == "z"
-
-# Must include one non Latin character  
-class ruleLatinChar(passwordRule):
-        def check(self, password: str) -> bool:
-             return any(ord(c) > 127 for c in password)
-
-# No words are longer than 4      
-class ruleWordLength:
-        def check(self, password: str) -> bool:
-             word = password.split()
-             for words in word:
-                return len(w) > 5
-
-# All neighbor charcters must form word
-class ruleNeighborWords:
-        def check(self, password: str) -> bool:
-             word = password.split()
-             for words in word:
-                  return words.alpha()
-                
-# All symbols must neighbor the letter 'b'
-class ruleNeighborB:
-        def check(self, password: str) -> bool:
-             word = password.split()
-             for words in word:
-                  return words == 'c'
-             
+#Throwback rules     
 #Must include the word "stick"
 class ruleNeighborStick:
+        description = "Must include the word stick"
         def check(self, password: str) -> bool:
-             word = password.split()
-             for words in word:
-                  return words == "stick"   
+            word = "stick"
+            originalPas = password.lower()
+            return any(stick in originalPas for stick in word)
 
 RANDOM_THROWBACKS_Rules =[
-     ruleOneCharZ,
-     ruleLatinChar,
-     ruleWordLength,
-     ruleNeighborWords,
-     ruleNeighborB,
      ruleNeighborStick
 ]
+
 # Randomize the throwbacks 
 class RandomThrowbacks:
      def __init__(self):
