@@ -25,21 +25,18 @@ class passwordValidator:
         self.subscribe(ruleTen())
         self.subscribe(ruleEleven())
         self.subscribe(ruleTwelve())
-#        self.subscribe(ruleWeaponType())
-#        self.subscribe(ruleReplaceTenthChar())
+        self.subscribe(ruleWeaponType())
+        self.subscribe(ruleReplaceTenthChar())
         self.subscribe(romanNumTest())
 
     def subscribe(self, rule: passwordRule) -> None:
         self._rules.append(rule)
-        print("new rule added")
     
     def unsub(self, rule: passwordRule) -> None:
         self._rules.remove(rule)
-        print("Removed rule")
     
     # Validates all the rules built into the validator, will return arrays of descriptions and booleans
     def validate(self, password: str) -> dict:
-        """Notify all rules and collect results"""
         results = {}
         rule_name = []
         descriptions = []
@@ -99,7 +96,7 @@ class ruleFour(passwordRule):
 class ruleFive(passwordRule):
         description = "Contains at least one special character"
 
-        def __init__(self, specialChar: str = "!@#$%^&*-_=+"):
+        def __init__(self, specialChar: str = "!@#$%^&*-_=+():[]"):
              self.specialChar = specialChar
         def check(self, password: str) -> bool:
             return any(c in self.specialChar for c in password)
@@ -159,19 +156,19 @@ class ruleTwelve(passwordRule):
      
 # What weapon?
 class ruleWeaponType(passwordRule):
-    weapon = ["A weapon with a long shaft and a pointed tip, typically of metal, used for thrusting or throwing.",
-              "A short, blunt melee weapon crafted from wood, designed for striking, bashing, or bludgeoning in close-quarters combat",
-              "A gun causing injury or damage by the emission of rays."]
-    weapon_words = ["spear", "club", "raygun"]
+    weapons = list(zip(
+        ["A weapon with a long shaft and a pointed tip, typically of metal, used for thrusting or throwing.",
+         "A short, blunt melee weapon crafted from wood, designed for striking, bashing, or bludgeoning in close-quarters combat",
+         "A gun causing injury or damage by the emission of rays."],
+        ["spear", "club", "raygun"]
+    ))
 
     def __init__(self):
-        self.choice = random.randint(0, 2)
-        self.description = "What weapon is this? " + self.weapon[self.choice]
+        self.choice = random.choice(self.weapons)
+        self.description = "What weapon is this? " + self.choice[0]
 
     def check(self, password: str) -> bool:
-        word = self.weapon_words[self.choice]
-        originalPas = password.lower()
-        return word in originalPas
+        return self.choice[1] in password.lower()
     
 # Replace 10th character
 class ruleReplaceTenthChar(passwordRule):
@@ -185,9 +182,7 @@ class ruleReplaceTenthChar(passwordRule):
         chosen = self.symbol[self.choice]
         if len(password) < 10:
             return False
-        
-        print("Password length:", len(password))
-        print("10th character (index 9):", password[9])
+
         return password[9].lower() == chosen
 
 class romanNumTest(passwordRule):
@@ -196,14 +191,10 @@ class romanNumTest(passwordRule):
 
     def check(self, password: str) -> bool:
         roman_values = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
-
         found = [roman_values[c] for c in password if c in roman_values]
-
         if not found:
             return False
-
         product = 1
         for value in found:
             product *= value
-
         return product == self.TARGET_PRODUCT
