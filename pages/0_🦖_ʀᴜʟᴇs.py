@@ -41,8 +41,8 @@ st.divider()
 # Instruction box
 with st.container(border=True, gap="small"):
     st.text("1. Create a password of your choice")
-    st.text("2. Press \"Enter\"")
-    st.text("3. Create a better password based on the prompts")
+    st.text("2. Push the check security button")
+    st.text("3. Create a better password based of the prompts")
     st.text("4. Have fun!")
     st.text("5. Repeat")
 
