@@ -58,7 +58,7 @@ class passwordValidator:
             if not is_valid:
                 all_valid = False
         
-        print("/// DESCTIPTION ///", descriptions)
+        # print("/// DESCTIPTION ///", descriptions)
 
         return {
             'all_valid': all_valid,
@@ -120,9 +120,9 @@ class ruleSeven(passwordRule):
 
 # Rule 8 - what killed the dinosaurs?
 class ruleEight(passwordRule):
-        description = "Contains dinosaur killer keyword (astroid or bigrock)"
+        description = "What wiped out the dinos?"
         def check(self, password: str) -> bool:
-            answer = ["astroid", "bigrock"]
+            answer = ["asteroid", "bigrock"]
             originalPas = password.lower()
             return any(noise in originalPas for noise in answer)
 
