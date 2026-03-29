@@ -11,17 +11,40 @@ class passwordRule:
 # subject
 class passwordValidator:
     def __init__(self):
-        self._rules: List[passwordRule] = []
-        self.subscribe(ruleOne())
-        self.subscribe(ruleTwo())
-        self.subscribe(ruleThree())
-        self.subscribe(ruleFour())
-        self.subscribe(ruleFive())
-        self.subscribe(ruleSix())
-        self.subscribe(ruleSeven())
-        self.subscribe(ruleEight())
-        self.subscribe(ruleNine())
+       self._rules: List[passwordRule] = []
+       #self.subscribe(ruleOne())
+       #self.subscribe(ruleTwo())
+       #self.subscribe(ruleThree())
+       #self.subscribe(ruleFour())
+       #self.subscribe(ruleFive())
+       #self.subscribe(ruleSix())
+       #self.subscribe(ruleSeven())
+       #self.subscribe(ruleEight())
+       #self.subscribe(ruleNine())
+       #self.subscribe(ruleNeighborStick())
+       #self.subscribe(ruleWeaponType())
 
+    def init_random_select(self):
+        # Add rule to be randomly selected
+        ruleList = [ruleOne,
+                    ruleTwo,
+                    ruleThree,
+                    ruleFour,
+                    ruleFive,
+                    ruleSix,
+                    ruleSeven,
+                    ruleEight,
+                    ruleNine,
+                    ruleNeighborStick,
+                    ruleWeaponType]
+        
+        for need in range(9): # 9 Random Rules are chosen
+            left = len(ruleList)
+            print(left)
+            randnum = random.randrange(1, left)-1
+            self.subscribe(ruleList[randnum]())
+            del ruleList[randnum]
+            
     def subscribe(self, rule: passwordRule) -> None:
         self._rules.append(rule)
         print("new rule added")
@@ -147,3 +170,4 @@ class ruleWeaponType(passwordRule):
         word = self.weapon_words[self.choice]
         originalPas = password.lower()
         return word in originalPas
+    

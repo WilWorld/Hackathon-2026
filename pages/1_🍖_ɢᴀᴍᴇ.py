@@ -44,7 +44,9 @@ validator = passwordValidator()
 
 # Persistent variables (safe until referesh)
 if 'ruleSet' not in st.session_state:
+    validator.init_random_select()
     st.session_state['ruleSet'] = validator.validate("initial")["descriptions"]
+    print(st.session_state['ruleSet'])
 if 'uncoveredRules' not in st.session_state:
     st.session_state['uncoveredRules'] = []
 if 'lastRule' not in st.session_state:  
