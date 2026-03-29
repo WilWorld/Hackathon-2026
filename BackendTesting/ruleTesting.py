@@ -25,7 +25,7 @@ class passwordValidator:
         self.subscribe(ruleTen())
         self.subscribe(ruleEleven())
         self.subscribe(ruleTwelve())
-        self.subscribe(ruleThirteen())
+#        self.subscribe(ruleThirteen())
         self.subscribe(ruleWeaponType())
         self.subscribe(ruleReplaceTenthChar())
         self.subscribe(romanNumTest())
