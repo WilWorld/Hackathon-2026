@@ -4,8 +4,6 @@ from BackendTesting.zxcvbnTesting import password_test
 import re
 import random
 
-print("\n\n\n\n\n\n")
-
 # Page styling
 st.markdown(
     """
@@ -100,8 +98,6 @@ with statsContainer:
     col1_placeholder.caption("Time: --")
     col2_placeholder.caption("Guesses: --")
     col3_placeholder.caption("Score: --")
-
-print("🔵🔵🔵" + st.session_state['passwordAttempt'])
 
 # Saves password state across the session
 passwordAttempt = st.text_input(
