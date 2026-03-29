@@ -157,15 +157,22 @@ class ruleTwelve(passwordRule):
      
 # Rule 13 - Password must include a word in reverse order like moon -> noom
 class ruleThirteen(passwordRule):
-     description = "The password must include a word in reverse order like moon -> noom"
-     def check(self, password: str) -> bool:
-        word = re.findall(r'\b\w{3,}\b', password)
-        for words in word:
-            print("😊 " + words + "\n")
-            reversed = words[::-1]
-            if reversed in password and reversed != words:
-                return True
+    description = "The password must include a word in reverse order like moon → noom"
+    def check(self, password: str) -> bool:
+        word = ''.join(c.lower() for c in password if c.isalpha())
+        length = len(word)
+
+        for i in range(length):
+            for j in range(i + 3, length + 1):
+                org = word[i:j]
+                reversed = org[::-1]
+
+                if reversed in word and org != reversed:
+                    print(f"Match: {org} ↔ {reversed}")
+                    return True
+
         return False
+    
 # What weapon?
 class ruleWeaponType(passwordRule):
     weapons = list(zip(
