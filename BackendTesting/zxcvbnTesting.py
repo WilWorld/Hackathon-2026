@@ -7,7 +7,7 @@ def password_test(password):
         return ["Password exceeds 72 characters", "For stats, have a password under 72 characters"]
     
     r = zxcvbn(password)
-    time = "Time: " + format_time(r["crack_times_seconds"])
+    time = "Time: " + format_time(r["calc_time"])
     guess = "Guesses: " + format_guesses(r["guesses"])
     score = "Score: " + format_score(r["score"])
 
